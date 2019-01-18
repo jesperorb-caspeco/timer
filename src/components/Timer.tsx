@@ -3,7 +3,7 @@ import { secondsToReadableTime } from "../helpers/helpers";
 import Button from "./button/Button";
 
 const DEFAULTS = {
-  IDLE_TIMEOUT: 1000,
+  IDLE_TIMEOUT: 5000,
   TIMER: 180,
   INTERVAL: 1000
 };
@@ -51,7 +51,7 @@ class Timer extends Component<IAppProps, IAppState> {
 
   private resetTimer = (): void => {
     this.stopTimer();
-    this.setState({ seconds: DEFAULTS.TIMER, started: false });
+    this.setState({ seconds: DEFAULTS.TIMER, started: false, finished: false });
   };
 
   private resetAfterIdle = (): void => {
@@ -74,14 +74,20 @@ class Timer extends Component<IAppProps, IAppState> {
     }
   };
 
-  private getClassName = (finished: boolean): string => {
-    return finished ? "container gradient" : "container";
+  private getClassName = (finished: boolean, started: boolean): string => {
+    return finished && !started ? "container gradient" : "container";
   };
 
+  private onChange = (event: any) => {
+    const value = parseInt(event.target.value, 10)
+    this.setState({ seconds: isNaN(value) ? 0 : value })
+  }
+
   render() {
-    const { finished, seconds } = this.state;
+    const { finished, seconds, started } = this.state;
     return (
-      <div className={this.getClassName(finished)}>
+      <div className={this.getClassName(finished, started)}>
+        { !started && <input type="text" value={ seconds } onChange={this.onChange} className="input"/>}
         <h1>{secondsToReadableTime(seconds)}</h1>
         <div className="buttons-container">
           <Button onClick={this.startTimer}>Start</Button>
