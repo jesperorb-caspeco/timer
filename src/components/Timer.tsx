@@ -3,7 +3,7 @@ import { secondsToReadableTime } from "../helpers/helpers";
 import Button from "./button/Button";
 
 const DEFAULTS = {
-  IDLE_TIMEOUT: 5000,
+  IDLE_TIMEOUT: 10000,
   TIMER: 180,
   INTERVAL: 1000
 };
